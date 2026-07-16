@@ -2,3 +2,13 @@ node_modules/
 
 # 构建产物目录：内含签名私钥（annotator.pem，决定扩展 ID）、crx、zip，切勿提交
 dist/
+
+# 本地演示/录屏用页面，不随仓库发布
+demo/
+
+# 本地打包脚本（仅开发者本地使用）
+pack-zip.py
+pack.js
+
+# 商店上架文案（本地参考，不进仓库）
+STORE_LISTING.md
