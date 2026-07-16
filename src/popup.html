@@ -8,7 +8,7 @@
   <div class="wa-pop">
     <div class="wa-head">
       <h1>Annotator</h1>
-      <button id="settings" class="gear-btn" title="设置 / Settings" aria-label="settings">⚙</button>
+      <button id="settings" class="toggle-btn" title="设置 / Settings">⚙</button>
     </div>
 
     <!-- 主视图 -->
@@ -33,11 +33,10 @@
       <p class="hint" id="status"></p>
     </div>
 
-    <!-- 设置视图（点击右上角齿轮进入） -->
+    <!-- 设置视图（点击右上角切换按钮进入） -->
     <div id="settingsView" class="hidden">
       <div class="settings-head">
         <h2 data-i18n="settingsTitle">设置</h2>
-        <button id="settingsBack" class="gear-btn" aria-label="back">‹</button>
       </div>
       <div class="setting-row">
         <label for="themeSel" data-i18n="themeLabel">主题</label>
@@ -63,6 +62,13 @@
           <option value="768">768</option>
         </select>
       </div>
+      <div class="setting-row">
+        <label data-i18n="quickTagToggle">快捷标注标签</label>
+        <label class="toggle">
+          <input type="checkbox" id="quickTagToggle" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
       <div class="setting-row shortcut-row">
         <label data-i18n="shortcutLabel">标注快捷键:</label>
         <span id="shortcutKey" class="shortcut-key">Ctrl+.</span>
@@ -71,6 +77,8 @@
       <div class="setting-row version-row">
         <label data-i18n="versionLabel">版本</label>
         <a id="versionLink" class="version-link" target="_blank" rel="noopener noreferrer">v1.0.0</a>
+      </div>
+      <div class="setting-row">
       </div>
 
       <div class="settings-foot" hidden>
@@ -86,9 +94,3 @@
   <script src="popup.js"></script>
 </body>
 </html>
-
-
-
-
-
-

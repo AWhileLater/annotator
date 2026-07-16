@@ -120,7 +120,7 @@ All annotations and settings are stored locally in your browser (`chrome.storage
 
 ## Sponsor
 
-If Annotator saves you time, you can support its development:
+If Annotator saves you time, you can support its development(Buy me some tokens.):
 
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/awhilelaterstudio)
 

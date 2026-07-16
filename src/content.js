@@ -100,6 +100,15 @@
     hideHover(); // 关闭输入框时同步隐藏临时红框
   }
 
+  // 让 textarea 抖动，提示用户输入标注内容
+  function shakeTextarea(tx) {
+    tx.classList.remove('wa-shake');
+    // 强制回流以重播动画
+    void tx.offsetWidth;
+    tx.classList.add('wa-shake');
+    tx.focus();
+  }
+
   function openPopover(el, clientX, clientY) {
     closePopover();
     applyTheme(); // 确保弹窗使用最新主题
@@ -108,16 +117,30 @@
     popover = document.createElement('div');
     popover.id = 'wa-input-popover';
     popover.innerHTML =
+      '<div class="wa-quick-tags" style="display:none" data-wa-qt>' +
+      '<span class="wa-quick-tag" data-tag="' + WA.t('quickTagBug') + '">' + WA.t('quickTagBug') + '</span>' +
+      '<span class="wa-quick-tag" data-tag="' + WA.t('quickTagStyle') + '">' + WA.t('quickTagStyle') + '</span>' +
+      '<span class="wa-quick-tag" data-tag="' + WA.t('quickTagLayout') + '">' + WA.t('quickTagLayout') + '</span>' +
+      '<span class="wa-quick-tag" data-tag="' + WA.t('quickTagMissing') + '">' + WA.t('quickTagMissing') + '</span>' +
+      '<span class="wa-quick-tag" data-tag="' + WA.t('quickTagOptimize') + '">' + WA.t('quickTagOptimize') + '</span>' +
+      '<span class="wa-quick-tag" data-tag="' + WA.t('quickTagInteraction') + '">' + WA.t('quickTagInteraction') + '</span>' +
+      '</div>' +
       '<textarea placeholder="' + WA.t('popoverPlaceholder') + '"></textarea>' +
       '<div class="wa-row"><button class="wa-cancel">' + WA.t('cancel') + '</button>' +
       '<button class="wa-ok">' + WA.t('save') + '</button></div>';
     document.documentElement.appendChild(popover);
+    // 根据设置决定是否显示快捷标签
+    chrome.storage.local.get('wa_quickTagEnabled', function (o) {
+      const qt = popover.querySelector('[data-wa-qt]');
+      if (qt) qt.style.display = (o.wa_quickTagEnabled !== false) ? '' : 'none';
+    });
     const tx = popover.querySelector('textarea');
     const ok = popover.querySelector('.wa-ok');
     const cancel = popover.querySelector('.wa-cancel');
     // 定位到点击处附近，限制在视口内
     const px = Math.min(Math.max(clientX + 8, 8), window.innerWidth - 268);
-    const py = Math.min(Math.max(clientY + 8, 8), window.innerHeight - 160);
+    const ph = popover.offsetHeight || 280;
+    const py = Math.min(Math.max(clientY + 8, 8), window.innerHeight - ph - 10);
     popover.style.left = px + 'px';
     popover.style.top = py + 'px';
     cancel.addEventListener('click', closePopover);
@@ -130,8 +153,30 @@
         safeSend({ type: 'WA_MODE_ENDED' });
         openPopup(); // 保存后重新打开插件 UI，展示更新后的标注列表
       } else {
-        closePopover(); // 取消输入不结束模式，可继续点其他元素
+        // 未输入内容时抖动提示，不关闭弹窗
+        shakeTextarea(tx);
       }
+    });
+    // 快捷输入标签：点击直接填入 textarea
+    popover.querySelectorAll('.wa-quick-tag').forEach(function (tag) {
+      tag.addEventListener('click', function () {
+        const shortLabel = tag.getAttribute('data-tag') || tag.textContent;
+        const tagInstructionMap = {
+          'Bug': WA.t('quickTagInstructionBug'),
+          '样式': WA.t('quickTagInstructionStyle'),
+          '布局': WA.t('quickTagInstructionLayout'),
+          '功能': WA.t('quickTagInstructionMissing'),
+          '优化': WA.t('quickTagInstructionOptimize'),
+          '交互': WA.t('quickTagInstructionInteraction'),
+          'Style': WA.t('quickTagInstructionStyle'),
+          'Layout': WA.t('quickTagInstructionLayout'),
+          'Feature': WA.t('quickTagInstructionMissing'),
+          'Optimize': WA.t('quickTagInstructionOptimize'),
+          'Interaction': WA.t('quickTagInstructionInteraction'),
+        };
+        tx.value = tagInstructionMap[shortLabel] || shortLabel;
+        tx.focus();
+      });
     });
     setTimeout(function () { tx.focus(); }, 30);
   }
@@ -184,7 +229,7 @@
     return el;
   }
 
-  // 按目标元素“当前”在视口中的位置重定位气泡/区域边框。position:fixed + 视口坐标，
+  // 按目标元素"当前"在视口中的位置重定位气泡/区域边框。position:fixed + 视口坐标，
   // 滚动/缩放时由 repositionAll 重算，从而让已完成的标注跟随页面元素一起移动。
   function positionOverlay(rec) {
     const el = rec.el;
@@ -227,7 +272,7 @@
 
   // 安全地发送（fire-and-forget）：MV3 下即便传了 callback，sendMessage 返回的
   // Promise 在「接收端不存在」时仍会 reject 且未捕获。这里用 .catch 兜底，避免
-  // “Could not establish connection. Receiving end does not exist.” 未捕获报错。
+  // "Could not establish connection. Receiving end does not exist." 未捕获报错。
   function safeSend(msg) {
     try {
       const p = chrome.runtime.sendMessage(msg);

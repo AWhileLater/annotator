@@ -35,7 +35,7 @@
       statusCopiedText: '已复制提示词（仅文本，{n} 条标注）',
       statusCopiedShot: '已复制截图',
       errNoTab: '没有活动标签页',
-      errNotInjected: '内容脚本未注入（可能是受限页面）',
+      errNotInjected: '插件未注入（可能是受限页面，或刷新页面重新尝试注入）',
       errFetchFail: '获取失败',
       errScreenshotFail: '截图失败',
       errClipboardBlocked: '剪贴板图片被拦截：已复制文本并下载 PNG 兜底',
@@ -54,7 +54,22 @@
       shortcutNotSet: '未设置',
       sponsorLink: '在 Ko-fi 上赞助',
       sponsorPrompt: '如果 Annotator 帮你节省了时间，你可以支持它的持续发展：',
-      versionLabel: '版本'
+      quickTagToggle: '快捷标注标签',
+      quickTagBug: 'Bug',
+      quickTagStyle: '样式',
+      quickTagLayout: '布局',
+      quickTagMissing: '功能',
+      quickTagOptimize: '优化',
+      quickTagInteraction: '交互',
+      quickTagInstructionBug: '修复此处的 Bug',
+      quickTagInstructionStyle: '修复此处的样式问题',
+      quickTagInstructionLayout: '修复此处的布局问题',
+      quickTagInstructionMissing: '在此处添加缺失的功能',
+      quickTagInstructionOptimize: '优化此处的性能或代码',
+      quickTagInstructionInteraction: '修复此处的交互问题',
+      versionLabel: '版本',
+      settings: '设置',
+      back: '返回'
     },
     en: {
       start: 'Start',
@@ -85,7 +100,7 @@
       statusCopiedText: 'Copied prompt (text only, {n} annotation(s))',
       statusCopiedShot: 'Screenshot copied',
       errNoTab: 'No active tab',
-      errNotInjected: 'Content script not injected (possibly a restricted page)',
+      errNotInjected: 'Plugin not injected (possibly a restricted page, or refresh the page to re-inject)',
       errFetchFail: 'Failed to fetch',
       errScreenshotFail: 'Screenshot failed',
       errClipboardBlocked: 'Clipboard image blocked: copied text and downloaded PNG as fallback',
@@ -104,7 +119,22 @@
       shortcutNotSet: 'Not set',
       sponsorLink: 'Support on Ko-fi',
       sponsorPrompt: 'If Annotator saves you time, you can support its development:',
-      versionLabel: 'Version'
+      quickTagToggle: 'Quick annotation tags',
+      quickTagBug: 'Bug',
+      quickTagStyle: 'Style',
+      quickTagLayout: 'Layout',
+      quickTagMissing: 'Feature',
+      quickTagOptimize: 'Optimize',
+      quickTagInteraction: 'Interaction',
+      quickTagInstructionBug: 'Fix this bug',
+      quickTagInstructionStyle: 'Fix the styling issue here',
+      quickTagInstructionLayout: 'Fix the layout problem here',
+      quickTagInstructionMissing: 'Add the missing feature here',
+      quickTagInstructionOptimize: 'Optimize this element',
+      quickTagInstructionInteraction: 'Fix the interaction issue here',
+      versionLabel: 'Version',
+      settings: 'Settings',
+      back: 'Back'
     }
   };
 
@@ -167,4 +197,3 @@
     root.WA = api;
   }
 })(typeof window !== 'undefined' ? window : this);
-

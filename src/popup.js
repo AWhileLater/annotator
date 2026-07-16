@@ -2,7 +2,7 @@
 'use strict';
 
 // MV3 健壮性：拦截任何未处理的 Promise 拒绝（典型为 service worker 唤醒竞态导致的
-// “Receiving end does not exist”），避免它在控制台以 “Uncaught (in promise)” 刷屏。
+// "Receiving end does not exist"），避免它在控制台以 "Uncaught (in promise)" 刷屏。
 // 业务层已用 .catch 做优雅降级，这里只作为最终兜底。
 window.addEventListener('unhandledrejection', function (e) {
   const m = (e.reason && (e.reason.message || String(e.reason))) || '';
@@ -13,7 +13,7 @@ window.addEventListener('unhandledrejection', function (e) {
 });
 
 // 保活端口：打开 popup 时与 service worker 建立长连接，使其在 popup 期间保持存活，
-// 从根上消除 “popup 打开瞬间 SW 尚未唤醒” 的竞态。popup 关闭后端口断开，SW 正常回收。
+// 从根上消除 "popup 打开瞬间 SW 尚未唤醒" 的竞态。popup 关闭后端口断开，SW 正常回收。
 try { chrome.runtime.connect(); } catch (e) {}
 
 const $ = (id) => document.getElementById(id);
@@ -72,6 +72,7 @@ function applyI18n() {
     el.setAttribute('title', WA.t(el.getAttribute('data-i18n-title')));
   });
   applyThemeUI(); // 主题选择项也跟随语言（选项文案）
+  updateToggleBtn(); // 切换按钮图标和提示跟随语言
 }
 
 // 实时刷新预览（不复制，仅方便调试查看当前标注数据）
@@ -214,20 +215,38 @@ function setLanguage(next) {
 }
 $('langSel').addEventListener('change', () => setLanguage($('langSel').value));
 
-// 配置界面：点击右上角齿轮进入，点击返回箭头回到主视图
-function showSettings() {
-  $('mainView').classList.add('hidden');
-  $('settingsView').classList.remove('hidden');
-  initShortcut(); // 每次打开设置都刷新实际绑定的快捷键
-  initLinks();    // 刷新版本号与外链地址
+// 切换主视图 / 设置视图：用一个按钮管理界面切换
+function toggleView() {
+  const isSettings = !$('settingsView').classList.contains('hidden');
+  if (isSettings) {
+    // 当前在设置页 → 返回主视图
+    $('settingsView').classList.add('hidden');
+    $('mainView').classList.remove('hidden');
+    renderPreview(false);
+  } else {
+    // 当前在主视图 → 进入设置页
+    $('mainView').classList.add('hidden');
+    $('settingsView').classList.remove('hidden');
+    initShortcut();
+    initLinks();
+  }
+  updateToggleBtn();
 }
-function hideSettings() {
-  $('settingsView').classList.add('hidden');
-  $('mainView').classList.remove('hidden');
-  renderPreview(false); // 回到主视图时刷新列表/预览
+// 根据当前视图更新切换按钮图标和提示
+function updateToggleBtn() {
+  const isSettings = !$('settingsView').classList.contains('hidden');
+  const btn = $('settings');
+  if (isSettings) {
+    btn.textContent = '‹';
+    btn.title = WA.t('back');
+    btn.setAttribute('aria-label', 'back');
+  } else {
+    btn.textContent = '⚙';
+    btn.title = WA.t('settings');
+    btn.setAttribute('aria-label', 'settings');
+  }
 }
-$('settings').addEventListener('click', showSettings);
-$('settingsBack').addEventListener('click', hideSettings);
+$('settings').addEventListener('click', toggleView);
 
 // 跳转到浏览器扩展快捷键设置页：按 UA 区分 Chrome / Edge，使用各自协议头。
 // 具体按键在该页由用户重绑（manifest.commands 仅提供默认值 Ctrl+.）。
@@ -243,7 +262,7 @@ function openShortcutSettings() {
 }
 $('openShortcuts').addEventListener('click', openShortcutSettings);
 
-// 读取用户实际绑定的快捷键并显示在设置页（而非写死“Ctrl+.”）。
+// 读取用户实际绑定的快捷键并显示在设置页（而非写死"Ctrl+."）。
 // Chrome 返回形如 "Ctrl+Period"，把按键 token 转成更直观的符号（. , 等）。
 function formatShortcut(s) {
   if (!s) return '';
@@ -262,6 +281,20 @@ function initShortcut() {
   chrome.commands.getAll(function (cmds) {
     const c = (cmds || []).find(function (x) { return x.name === 'start-annotation'; });
     el.textContent = (c && c.shortcut) ? formatShortcut(c.shortcut) : WA.t('shortcutNotSet');
+  });
+}
+
+// 设置页底部外链：版本号（取自 manifest，点击跳 GitHub）+ Ko-fi 赞助
+
+// 快捷标注标签开关：读取/保存到 storage，影响 content script 弹窗是否显示标签
+function initQuickTagToggle() {
+  const sw = $('quickTagToggle');
+  if (!sw) return;
+  chrome.storage.local.get('wa_quickTagEnabled', function (o) {
+    sw.checked = o.wa_quickTagEnabled !== false; // 默认开
+  });
+  sw.addEventListener('change', function () {
+    chrome.storage.local.set({ wa_quickTagEnabled: sw.checked });
   });
 }
 
@@ -300,7 +333,7 @@ $('themeSel').addEventListener('change', () => {
 });
 
 // ESC 在 popup 聚焦时：主动停止标注。浏览器默认会把 popup 关掉，但标注状态会被
-// 正确终止（content script 收到 WA_STOP）——解决“按 ESC 只关了 UI 却没停标注”的问题。
+// 正确终止（content script 收到 WA_STOP）——解决"按 ESC 只关了 UI 却没停标注"的问题。
 // 尝试 preventDefault 以尽量保留 popup；即便浏览器仍关掉 popup，标注也已停止。
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' || e.keyCode === 27) {
@@ -446,5 +479,6 @@ WA.load(() => {
   initTheme();
   initShortcut();
   initLinks();
+  initQuickTagToggle();
   renderPreview(false);
 });
