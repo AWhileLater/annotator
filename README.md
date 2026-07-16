@@ -1,3 +1,7 @@
+<p align="center">
+  <a href="README.md"><b>English</b></a> · <a href="README.zh-CN.md">中文</a>
+</p>
+
 # Annotator
 
 **Annotate web elements, capture a screenshot, and copy a structured prompt for AI coding assistants in one click.**
@@ -8,7 +12,7 @@ Annotator is a Manifest V3 browser extension for Chrome and Edge. Hover to highl
 
 ## Works with any AI coding assistant
 
-Annotator outputs plain text plus an optional screenshot, so it works with **any AI coding agent that can receive pasted context** — no plugin or API key required. It is built for editing code locally, so it pairs with agents such as **Codex**, **Claude Code (`cc`)**, **Gemini CLI**, **Cursor**, **Windsurf**, **Cline**, **Aider**, **Continue**, and **GitHub Copilot Chat**.
+Annotator outputs plain text plus an optional screenshot, so it works with **any AI coding agent that can receive pasted context** — no plugin or API key required. It is built for editing code locally, so it pairs with agents such as **Codex**, **Claude Code**, **Gemini CLI**, **Cursor**, **Windsurf**, **Cline**, **Aider**, **Continue**, **Hermes**, **WorkBuddy**, and **GitHub Copilot Chat**.
 
 ### Multimodal or text-only — both work
 
@@ -118,7 +122,7 @@ All annotations and settings are stored locally in your browser (`chrome.storage
 
 If Annotator saves you time, you can support its development:
 
-[![Buy me a coffee](https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/awhilelaterstudio)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/awhilelaterstudio)
 
 ## License
 
