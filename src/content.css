@@ -1,0 +1,179 @@
+/* ===== Web Annotator 注入样式 ===== */
+
+/* 标注模式：笔形光标 */
+html.web-annotator-active,
+html.web-annotator-active * {
+  cursor: crosshair !important;
+}
+/* 自身输入框 UI 不被十字光标覆盖：恢复正常操作指针 */
+html.web-annotator-active #wa-input-popover,
+html.web-annotator-active #wa-input-popover * {
+  cursor: default !important;
+}
+html.web-annotator-active #wa-input-popover textarea {
+  cursor: text !important;
+}
+html.web-annotator-active #wa-input-popover button {
+  cursor: pointer !important;
+}
+
+/* 悬停高亮框（跟随元素边框） */
+#wa-hover-box {
+  position: fixed;
+  pointer-events: none;
+  border: 2px solid #ff3b30;
+  background: rgba(255, 59, 48, 0.10);
+  border-radius: 3px;
+  z-index: 2147483646;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.6);
+  transition: all 0.04s linear;
+}
+
+/* 悬停时跟随显示的 selector 预览标签 */
+#wa-selector-label {
+  position: fixed;
+  z-index: 2147483646;
+  pointer-events: none;
+  display: none;
+  max-width: 100%;
+  padding: 2px 7px;
+  background: rgba(20, 22, 28, 0.82);
+  color: #7ee787;
+  font: 11px/1.4 "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  border-radius: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+/* 标注区域持久边框（截图时保留） */
+.wa-region {
+  position: fixed;
+  pointer-events: none;
+  border: 2px solid #ff3b30;
+  background: rgba(255, 59, 48, 0.08);
+  border-radius: 3px;
+  z-index: 2147483645;
+  box-sizing: border-box;
+}
+
+/* 标注气泡（带序号） */
+.wa-bubble {
+  position: fixed;
+  z-index: 2147483647;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ff3b30;
+  color: #fff;
+  font: 700 12px/1 -apple-system, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+  border-radius: 11px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* 标注弹出输入框 —— 配色用 CSS 变量，跟随「系统深色」或 popup 手动主题（wa_theme） */
+:root {
+  --wa-pop-bg: #fff;
+  --wa-pop-border: #e2e2e7;
+  --wa-pop-shadow: rgba(0, 0, 0, 0.22);
+  --wa-ta-bg: #fff;
+  --wa-ta-border: #d2d2d7;
+  --wa-ta-color: #1d1d1f;
+  --wa-ta-ph: #8e8e93;
+  --wa-cancel-bg: #f0f0f3;
+  --wa-cancel-color: #333;
+}
+/* 系统深色（未手动选主题时） */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --wa-pop-bg: #2c2c2e;
+    --wa-pop-border: #3a3a3c;
+    --wa-pop-shadow: rgba(0, 0, 0, 0.5);
+    --wa-ta-bg: #1c1c1e;
+    --wa-ta-border: #3a3a3c;
+    --wa-ta-color: #f5f5f7;
+    --wa-ta-ph: #8e8e93;
+    --wa-cancel-bg: #3a3a3c;
+    --wa-cancel-color: #f5f5f7;
+  }
+}
+/* 手动夜间（强制深色，覆盖系统浅色） */
+html[data-wa-theme="dark"] {
+  --wa-pop-bg: #2c2c2e;
+  --wa-pop-border: #3a3a3c;
+  --wa-pop-shadow: rgba(0, 0, 0, 0.5);
+  --wa-ta-bg: #1c1c1e;
+  --wa-ta-border: #3a3a3c;
+  --wa-ta-color: #f5f5f7;
+  --wa-ta-ph: #8e8e93;
+  --wa-cancel-bg: #3a3a3c;
+  --wa-cancel-color: #f5f5f7;
+}
+/* 手动明亮（强制浅色，覆盖系统深色） */
+html[data-wa-theme="light"] {
+  --wa-pop-bg: #fff;
+  --wa-pop-border: #e2e2e7;
+  --wa-pop-shadow: rgba(0, 0, 0, 0.22);
+  --wa-ta-bg: #fff;
+  --wa-ta-border: #d2d2d7;
+  --wa-ta-color: #1d1d1f;
+  --wa-ta-ph: #8e8e93;
+  --wa-cancel-bg: #f0f0f3;
+  --wa-cancel-color: #333;
+}
+
+#wa-input-popover {
+  position: fixed;
+  z-index: 2147483647;
+  width: 260px;
+  background: var(--wa-pop-bg);
+  border: 1px solid var(--wa-pop-border);
+  border-radius: 10px;
+  box-shadow: 0 8px 28px var(--wa-pop-shadow);
+  padding: 10px;
+  font-family: -apple-system, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+#wa-input-popover textarea {
+  width: 100%;
+  min-height: 64px;
+  resize: vertical;
+  border: 1px solid var(--wa-ta-border);
+  border-radius: 7px;
+  padding: 7px 8px;
+  font-size: 13px;
+  line-height: 1.4;
+  outline: none;
+  box-sizing: border-box;
+  background: var(--wa-ta-bg);
+  color: var(--wa-ta-color);
+}
+#wa-input-popover textarea::placeholder { color: var(--wa-ta-ph); }
+#wa-input-popover textarea:focus { border-color: #ff3b30; }
+#wa-input-popover .wa-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+#wa-input-popover button {
+  border: none;
+  border-radius: 7px;
+  padding: 6px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  color: #fff;
+}
+#wa-input-popover .wa-ok { background: #ff3b30; color: #fff; }
+#wa-input-popover .wa-cancel { background: var(--wa-cancel-bg); color: var(--wa-cancel-color); }
+
+/* 自身 UI 不触发标注（保险） */
+#wa-hover-box, #wa-input-popover, .wa-bubble, .wa-bubble *, .wa-region, .wa-region * {
+  pointer-events: none;
+}
+#wa-input-popover { pointer-events: auto; }

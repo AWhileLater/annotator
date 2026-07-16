@@ -1,0 +1,4 @@
+node_modules/
+
+# 构建产物目录：内含签名私钥（annotator.pem，决定扩展 ID）、crx、zip，切勿提交
+dist/

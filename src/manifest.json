@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "Annotator: annotation prompts for AI coding",
+  "version": "1.0.0",
+  "description": "Annotate web elements, capture a screenshot, and copy a structured prompt for AI coding assistants in one click. Hover to highlight, click to drop a numbered note, and hand the result straight to Codex / Claude.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "permissions": ["activeTab", "storage", "clipboardWrite", "scripting"],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png"
+    },
+    "default_title": "Annotator: annotation prompts for AI coding"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["lib/i18n.js", "lib/format.js", "content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "commands": {
+    "start-annotation": {
+      "suggested_key": {
+        "default": "Ctrl+Period"
+      },
+      "description": "切换标注当前页面：Ctrl+. 开/关 (Annotator)"
+    }
+  }
+}

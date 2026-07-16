@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="wa-pop">
+    <div class="wa-head">
+      <h1>Annotator</h1>
+      <button id="settings" class="gear-btn" title="设置 / Settings" aria-label="settings">⚙</button>
+    </div>
+
+    <!-- 主视图 -->
+    <div id="mainView">
+      <div class="btns">
+        <button id="start" data-i18n="start">开始标注</button>
+        <button id="stop" data-i18n="stop">结束标注</button>
+        <button id="clear" data-i18n="clear">清除标注</button>
+      </div>
+      <div class="btns">
+        <button id="copyText" data-i18n="copyText" data-i18n-title="copyTextTitle">复制提示词</button>
+        <button id="copyShot" data-i18n="copyShot" data-i18n-title="copyShotTitle">复制截图</button>
+        <button id="copy" data-i18n="copy" data-i18n-title="copyTitle">提示词+截图</button>
+      </div>
+      <div class="mode" role="tablist">
+        <label><input type="radio" name="mode" value="simple" checked /> <span data-i18n="modeAnnotation">标注</span></label>
+        <label><input type="radio" name="mode" value="prompt" /> <span data-i18n="modePrompt">提示词</span></label>
+      </div>
+      <div id="annoList" class="anno-list"></div>
+      <textarea id="preview" readonly data-i18n-ph="previewPlaceholder" placeholder="标注文本预览将显示在这里…"></textarea>
+      <p class="err" id="err"></p>
+      <p class="hint" id="status"></p>
+    </div>
+
+    <!-- 设置视图（点击右上角齿轮进入） -->
+    <div id="settingsView" class="hidden">
+      <div class="settings-head">
+        <h2 data-i18n="settingsTitle">设置</h2>
+        <button id="settingsBack" class="gear-btn" aria-label="back">‹</button>
+      </div>
+      <div class="setting-row">
+        <label for="themeSel" data-i18n="themeLabel">主题</label>
+        <select id="themeSel">
+          <option value="system" data-i18n="themeSystem">跟随系统</option>
+          <option value="light" data-i18n="themeLightOpt">明亮</option>
+          <option value="dark" data-i18n="themeDarkOpt">夜间</option>
+        </select>
+      </div>
+      <div class="setting-row">
+        <label for="langSel" data-i18n="langLabel">语言</label>
+        <select id="langSel">
+          <option value="zh">中文</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+      <div class="setting-row">
+        <label for="shotEdge" data-i18n="shotEdgeLabel">截图缩放,最长边</label>
+        <select id="shotEdge">
+          <option value="original">原始 / Original</option>
+          <option value="1280">1280</option>
+          <option value="1024">1024</option>
+          <option value="768">768</option>
+        </select>
+      </div>
+      <div class="setting-row shortcut-row">
+        <label data-i18n="shortcutLabel">标注快捷键:</label>
+        <span id="shortcutKey" class="shortcut-key">Ctrl+.</span>
+        <button id="openShortcuts" class="link-btn" data-i18n="shortcutConfig" data-i18n-title="shortcutConfigTitle">配置快捷键</button>
+      </div>
+      <div class="setting-row version-row">
+        <label data-i18n="versionLabel">版本</label>
+        <a id="versionLink" class="version-link" target="_blank" rel="noopener noreferrer">v1.0.0</a>
+      </div>
+      <!-- 赞助按钮暂时隐藏（账号收款问题）；恢复时去掉下方 hidden 属性即可 -->
+      <div class="settings-foot" hidden>
+        <a id="bmcLink" class="bmc-btn" target="_blank" rel="noopener noreferrer" data-i18n-title="sponsorLink">
+          <svg class="bmc-cup" viewBox="0 0 500 500" aria-hidden="true"><path d="M141 457.7c-5.6 0-10.2-4.5-10.2-10.2V77.6c0-5.6 4.5-10.2 10.2-10.2s10.2 4.5 10.2 10.2v369.9c0 5.7-4.6 10.2-10.2 10.2zM370.4 46.2c-51.1 0-92.5 41.4-92.5 92.5 0 3 .2 6 .5 9H152.7c-15.6 0-28.3 12.7-28.3 28.3v105.7c0 15.6 12.7 28.3 28.3 28.3h9.4v106.5c0 15.6 12.7 28.3 28.3 28.3h117.2c15.6 0 28.3-12.7 28.3-28.3V277.9h9.4c15.6 0 28.3-12.7 28.3-28.3V186.3c0-2.6-.4-5.1-1-7.5 28.5-12.6 48.4-41.1 48.4-74.1 0-44.6-36.2-80.8-80.8-80.8zm0 161.7h-58.9V92.5c0-32.5 26.4-58.9 58.9-58.9s58.9 26.4 58.9 58.9-26.4 58.9-58.9 58.9z"/></svg>
+          <span data-i18n="sponsorLink">请我喝咖啡</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <script src="lib/i18n.js"></script>
+  <script src="lib/format.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
