@@ -20,22 +20,24 @@ h1 { font-size: 15px; margin: 0; }
   flex: none; color: #0a84ff; text-decoration: none; cursor: pointer; font-size: 13px;
 }
 .version-row .version-link:hover { text-decoration: underline; }
-/* 设置页底部：赞助按钮（与配置项用分割线分开，非配置项，无「赞助」标签） */
+/* 设置页底部：赞助区域（温馨提示 + 小按钮） */
 .settings-foot {
   margin-top: 16px; padding-top: 12px; border-top: 1px solid #e5e5ea;
-  display: flex;
+  display: block; text-align: center;
 }
 .settings-foot[hidden] { display: none; }
-.settings-foot .bmc-btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: #FFDD00; color: #000000; text-decoration: none;
-  padding: 7px 14px; border-radius: 8px; font-size: 15px; font-weight: 700;
-  font-family: "Cookie", "Comic Sans MS", cursive, system-ui, sans-serif;
-  border: 1px solid #000000; cursor: pointer; transition: background .12s, transform .06s;
+.settings-foot .sponsor-prompt {
+  margin: 0; font-size: 11px; color: #8e8e93; line-height: 1.45; display: inline;
+
 }
-.settings-foot .bmc-btn:hover { background: #FFD400; }
-.settings-foot .bmc-btn:active { transform: translateY(1px); }
-.settings-foot .bmc-cup { width: 20px; height: 20px; fill: #ffffff; }
+.settings-foot .kofi-btn {
+  display: inline; align-items: baseline; gap: 3px;
+  background: none; color: #0a84ff; text-decoration: none;
+  padding: 0; border: none; border-radius: 0; font-size: 11px; font-weight: 600;
+  cursor: pointer; transition: none;
+}
+.settings-foot .kofi-btn:hover { text-decoration: underline; }
+.settings-foot .kofi-btn:active { transform: translateY(1px); }
 .setting-row {
   display: flex; align-items: center; justify-content: space-between;
   gap: 10px; margin-bottom: 12px; font-size: 13px;
@@ -90,8 +92,8 @@ button:active { transform: translateY(1px); background: #e6e6ea; }
   font-family: "SF Mono", "JetBrains Mono", Consolas, "Courier New", monospace;
   white-space: pre; tab-size: 2;
 }
-.err { color: #ff3b30; font-size: 12px; min-height: 16px; margin: 6px 0 0; }
-
+.err { color: #ff3b30; font-size: 13px; text-align: center; margin: 16px 0; padding: 10px 12px; background: #fff0ef; border-radius: 8px; border: 1px solid #f5c6c2; }
+.err:empty { display: none; }
 /* 底部状态文字：放大加粗，确保关键信息（如“已复制…”）清晰醒目 */
 #status {
   font-size: 14px;
@@ -148,7 +150,7 @@ button:active { transform: translateY(1px); background: #e6e6ea; }
   .setting-row.shortcut-row .shortcut-key { background: #3a3a3c; border-color: #48484a; color: #f5f5f7; }
   .hint { color: #98989d; }
   .hint.small { color: #6e6e73; }
-  button { background: #2c2c2e; border-color: #3a3a3c; color: #f5f5f7; }
+  .err { color: #ff6b6b; background: #3a2020; border-color: #5a3535; }
   button:hover { background: #3a3a3c; border-color: #48484a; }
   button:active { background: #48484a; }
   .mode { background: #2c2c2e; }
@@ -165,6 +167,9 @@ button:active { transform: translateY(1px); background: #e6e6ea; }
   #preview { background: #2c2c2e; border-color: #3a3a3c; color: #f5f5f7; }
   #status { color: #f5f5f7; }
   .settings-foot { border-top-color: #3a3a3c; }
+  .settings-foot .sponsor-prompt { color: #98989d; }
+  .settings-foot .kofi-btn { background: none; border: none; color: #0a84ff; }
+  .settings-foot .kofi-btn:hover { text-decoration: underline; }
 }
 /* 手动夜间：与系统深色完全一致 */
 html[data-theme="dark"] body { background: #1c1c1e; color: #f5f5f7; }
@@ -176,7 +181,7 @@ html[data-theme="dark"] .setting-row select { background: #2c2c2e; border-color:
 html[data-theme="dark"] .setting-row.shortcut-row .shortcut-key { background: #3a3a3c; border-color: #48484a; color: #f5f5f7; }
 html[data-theme="dark"] .hint { color: #98989d; }
 html[data-theme="dark"] .hint.small { color: #6e6e73; }
-html[data-theme="dark"] button { background: #2c2c2e; border-color: #3a3a3c; color: #f5f5f7; }
+html[data-theme="dark"] .err { color: #ff6b6b; background: #3a2020; border-color: #5a3535; }
 html[data-theme="dark"] .mode { background: #2c2c2e; }
 html[data-theme="dark"] .mode label { color: #d1d1d6; }
 html[data-theme="dark"] .mode label.active,
@@ -191,6 +196,9 @@ html[data-theme="dark"] .anno-edit-box { background: #1c1c1e; border-color: #3a3
 html[data-theme="dark"] #preview { background: #2c2c2e; border-color: #3a3a3c; color: #f5f5f7; }
 html[data-theme="dark"] #status { color: #f5f5f7; }
 html[data-theme="dark"] .settings-foot { border-top-color: #3a3a3c; }
+html[data-theme="dark"] .settings-foot .sponsor-prompt { color: #98989d; }
+html[data-theme="dark"] .settings-foot .kofi-btn { background: none; border: none; color: #0a84ff; }
+html[data-theme="dark"] .settings-foot .kofi-btn:hover { text-decoration: underline; }
 /* 手动明亮：即便系统是深色也强制浅色（显式浅色值覆盖 @media 深色） */
 html[data-theme="light"] body { background: #fff; color: #1d1d1f; }
 html[data-theme="light"] .wa-pop { background: #fff; }
@@ -216,3 +224,5 @@ html[data-theme="light"] .anno-note { color: #1d1d1f; }
 html[data-theme="light"] .anno-edit-box { background: #fff; border-color: #d2d2d7; color: #1d1d1f; }
 html[data-theme="light"] #preview { background: #fff; border-color: #d2d2d7; color: #1d1d1f; }
 html[data-theme="light"] #status { color: #1d1d1f; }
+
+

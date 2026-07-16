@@ -23,8 +23,8 @@ const WA = window.WA || { t: (k) => k, get: () => 'zh', load: (cb) => cb && cb('
 // ===== 设置页外链地址 =====
 // 点「版本」跳转，用于查看源码 / 更新日志
 const REPO_URL = 'https://github.com/AWhileLater/annotator';
-// 点「请我喝咖啡」跳转的 Buy Me A Coffee 赞助页
-const BMC_URL = 'https://buymeacoffee.com/awhilelaterstudio';
+// 点「赞助」跳转的 Ko-fi 赞助页
+const SPONSOR_URL = 'https://ko-fi.com/awhilelaterstudio';
 
 function activeTab() {
   return new Promise((res) => {
@@ -80,8 +80,8 @@ async function renderPreview(announce) {
     chrome.runtime.sendMessage({ type: 'WA_GET_ANNOTATIONS' }, res);
   });
   if (!r || !r.ok) {
-    $('preview').value = '';
-    if (announce) setErr(r ? r.error : WA.t('errFetchFail'));
+    $('preview').style.display = 'none';
+    setErr(r.errorKey ? WA.t(r.errorKey) : (r.error || WA.t('errFetchFail')));
     return null;
   }
   const mode = currentMode();
@@ -265,7 +265,7 @@ function initShortcut() {
   });
 }
 
-// 设置页底部外链：版本号（取自 manifest，点击跳 GitHub）+ Buy Me A Coffee 赞助
+// 设置页底部外链：版本号（取自 manifest，点击跳 GitHub）+ Ko-fi 赞助
 function initLinks() {
   const v = $('versionLink');
   if (v) {
@@ -273,8 +273,8 @@ function initLinks() {
     v.textContent = 'v' + ver;
     v.href = REPO_URL;
   }
-  const b = $('bmcLink');
-  if (b) b.href = BMC_URL;
+  const b = $('kofiLink');
+  if (b) b.href = SPONSOR_URL;
 }
 
 // 主题（明亮/夜间/跟随系统）：data-theme 挂在 <html> 上；null = 跟随系统，'light'/'dark' = 手动。

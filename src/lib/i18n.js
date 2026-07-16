@@ -52,7 +52,8 @@
       shortcutConfig: '配置快捷键',
       shortcutConfigTitle: '在浏览器扩展设置页管理快捷键（Ctrl+. 切换标注开/关）',
       shortcutNotSet: '未设置',
-      sponsorLink: 'Buy me a coffee',
+      sponsorLink: '在 Ko-fi 上赞助',
+      sponsorPrompt: '如果 Annotator 帮你节省了时间，你可以支持它的持续发展：',
       versionLabel: '版本'
     },
     en: {
@@ -101,7 +102,8 @@
       shortcutConfig: 'Configure',
       shortcutConfigTitle: 'Manage shortcuts in the browser extensions settings page (Ctrl+. toggles annotation on/off)',
       shortcutNotSet: 'Not set',
-      sponsorLink: 'Buy me a coffee',
+      sponsorLink: 'Support on Ko-fi',
+      sponsorPrompt: 'If Annotator saves you time, you can support its development:',
       versionLabel: 'Version'
     }
   };
@@ -165,3 +167,4 @@
     root.WA = api;
   }
 })(typeof window !== 'undefined' ? window : this);
+

@@ -125,7 +125,7 @@ async function getAnnotations() {
   const tab = await getActiveTab();
   if (!tab) return { ok: false, error: 'no active tab' };
   const resp = await sendToTab(tab.id, { type: 'WA_GET' });
-  if (!resp) return { ok: false, error: 'content script not injected (possibly chrome:// or a restricted page)' };
+  if (!resp) return { ok: false, errorKey: 'errNotInjected' };
   return { ok: true, payload: resp };
 }
 
