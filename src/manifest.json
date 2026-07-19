@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Annotator: annotation prompts for AI coding",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Annotate web elements, capture a screenshot, and copy a structured prompt for AI coding assistant — all in one click.",
   "icons": {
     "16": "icons/icon16.png",

@@ -109,6 +109,14 @@
     tx.focus();
   }
 
+  // 让整个弹窗抖动，提示不能切换标注目标
+  function shakePopover() {
+    if (!popover) return;
+    popover.classList.remove('wa-shake');
+    void popover.offsetWidth;
+    popover.classList.add('wa-shake');
+  }
+
   function openPopover(el, clientX, clientY) {
     closePopover();
     applyTheme(); // 确保弹窗使用最新主题
@@ -137,12 +145,28 @@
     const tx = popover.querySelector('textarea');
     const ok = popover.querySelector('.wa-ok');
     const cancel = popover.querySelector('.wa-cancel');
-    // 定位到点击处附近，限制在视口内
+    // 定位到点击处附近，智能翻转：先试下方，不够则翻转到上方，仍不够则居中钳制
     const px = Math.min(Math.max(clientX + 8, 8), window.innerWidth - 268);
-    const ph = popover.offsetHeight || 280;
-    const py = Math.min(Math.max(clientY + 8, 8), window.innerHeight - ph - 10);
-    popover.style.left = px + 'px';
-    popover.style.top = py + 'px';
+    function positionPopover() {
+      const ph = popover.offsetHeight || 280;
+      let py;
+      if (clientY + 8 + ph <= window.innerHeight - 10) {
+        py = clientY + 8; // 下方足够
+      } else if (clientY - ph - 8 >= 8) {
+        py = clientY - ph - 8; // 翻转到上方
+      } else {
+        py = Math.max(8, window.innerHeight - ph - 10); // 都不够，钳制到可见区域
+      }
+      popover.style.left = px + 'px';
+      popover.style.top = py + 'px';
+    }
+    positionPopover();
+    // 快捷标签异步加载后重新定位，防止高度变化导致溢出
+    chrome.storage.local.get('wa_quickTagEnabled', function (o) {
+      const qt = popover.querySelector('[data-wa-qt]');
+      if (qt) qt.style.display = (o.wa_quickTagEnabled !== false) ? '' : 'none';
+      positionPopover(); // 标签显隐后修正位置
+    });
     cancel.addEventListener('click', closePopover);
     ok.addEventListener('click', function () {
       const note = tx.value.trim();
@@ -321,6 +345,10 @@
     e.preventDefault();
     e.stopPropagation();
     if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+    if (popover) {
+      shakePopover(); // 弹窗打开时点击其他元素：抖动提示，不切换目标
+      return;
+    }
     if (t && t.nodeType === 1) {
       openPopover(t, e.clientX, e.clientY);
     }

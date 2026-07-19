@@ -183,6 +183,9 @@ html[data-wa-theme="light"] {
   border-color: #ff3b30 !important;
   box-shadow: 0 0 0 2px rgba(255, 59, 48, 0.25);
 }
+#wa-input-popover.wa-shake {
+  animation: wa-shake 0.4s ease-in-out;
+}
 
 /* 自身 UI 不触发标注（保险） */
 #wa-hover-box, #wa-input-popover, .wa-bubble, .wa-bubble *, .wa-region, .wa-region * {
